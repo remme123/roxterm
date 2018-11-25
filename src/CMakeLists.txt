@@ -22,6 +22,9 @@ target_include_directories(rtlib PRIVATE
     ${RTCOMMON_INCLUDE_DIRS} ${CMAKE_CURRENT_BINARY_DIR})
 target_compile_options(rtlib PRIVATE ${RTCOMMON_CFLAGS_OTHER})
 
+set(CMAKE_INSTALL_RPATH "/usr/local/lib")
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+
 add_executable(roxterm
     about.c main.c multitab.c multitab-close-button.c
     multitab-label.c menutree.c optsdbus.c roxterm.c roxterm-regex.c search.c
@@ -32,10 +35,10 @@ target_include_directories(roxterm PRIVATE
 target_compile_options(roxterm PRIVATE
     ${RTCOMMON_CFLAGS_OTHER} ${VTE_CFLAGS_OTHER})
 target_link_libraries(roxterm
-    ${RTCOMMON_LDFLAGS_OTHER} ${VTE_LDFLAGS_OTHER}
-    ${RTCOMMON_LIBRARY_DIRS} ${VTE_LIBRARY_DIRS}
+    ${RTCOMMON_LDFLAGS_OTHER}
+    ${RTCOMMON_LIBRARY_DIRS} 
     $<TARGET_OBJECTS:rtlib> 
-    ${RTCOMMON_LIBRARIES} ${VTE_LIBRARIES})
+    ${RTCOMMON_LIBRARIES} ${VTE_LDFLAGS})
 
 add_executable(roxterm-config
     capplet.c colourgui.c configlet.c getname.c optsdbus.c
