@@ -2268,6 +2268,24 @@ static gboolean roxterm_key_press_handler(GtkWidget *widget,
     return FALSE;
 }
 
+static void roxterm_selection_changed_handler(VteTerminal *vte,
+		gpointer user_data)
+{
+    ROXTermData *roxterm = user_data;
+    (void) vte;
+
+	if (vte_terminal_get_has_selection(vte) == FALSE)
+		return ;
+
+    g_return_if_fail(roxterm);
+#if VTE_CHECK_VERSION(0,50,0)
+    vte_terminal_copy_clipboard_format(VTE_TERMINAL(roxterm->widget),
+            VTE_FORMAT_TEXT);
+#else
+    vte_terminal_copy_clipboard(VTE_TERMINAL(roxterm->widget));
+#endif
+}
+
 static void roxterm_resize_window_handler(VteTerminal *vte,
         guint columns, guint rows, ROXTermData *roxterm)
 {
@@ -2545,6 +2563,12 @@ static void roxterm_connect_misc_signals(ROXTermData * roxterm)
             G_CALLBACK(roxterm_composited_changed_handler), roxterm);
     g_signal_connect(roxterm->widget, "key-press-event",
             G_CALLBACK(roxterm_key_press_handler), roxterm);
+    /*!
+     *  select to clipboard
+     *  derry,2018.11.22
+     */
+    g_signal_connect(roxterm->widget, "selection-changed",
+            G_CALLBACK(roxterm_selection_changed_handler), roxterm);
 }
 
 inline static void
