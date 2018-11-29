@@ -1420,6 +1420,13 @@ static gboolean roxterm_click_handler(GtkWidget *widget,
             }
         }
 
+		/*!
+		 *  执行粘贴操作
+		 *  derry,2018.11.29
+		 */
+		vte_terminal_paste_clipboard(VTE_TERMINAL(roxterm->widget));
+		return TRUE;
+
         if (roxterm->matched_url)
         {
             switch (roxterm->match_type)
